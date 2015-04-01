@@ -239,7 +239,7 @@ define [
             fade = no
           speak = 'complete'
           # products = @app.root.user?.products ? []
-          @$('.racecomplete').removeClass 'hidden' # unless 'packa' in products
+          # @$('.racecomplete').removeClass 'hidden' # unless 'packa' in products
         else if cpNext is cpTotal - 1
           message = 'Nearly there!'
           # speak = 'checkpoint'
@@ -263,7 +263,6 @@ define [
       @$runTimer.removeClass 'running'
       finishTime = @$runTimer.text()
       @$('.finishtime').text finishTime
-
       targetUrl = encodeURIComponent "https://triggerrally.com/track/#{@app.root.track.id}"
       shareText = encodeURIComponent "I finished \"#{@app.root.track.name}\" in #{finishTime}. Can you beat that?"
 
@@ -286,6 +285,11 @@ define [
       startTime = @game.startTime
       times = (time - startTime for time in @progress.cpTimes)
       @socket.emit 'times', { times }
+
+      backToAirConsoleMenu = ->
+        window.history.go -1
+
+      window.setTimeout backToAirConsoleMenu, 5000
 
     setTrackId: (@trackId) ->
       track = models.Track.findOrCreate trackId

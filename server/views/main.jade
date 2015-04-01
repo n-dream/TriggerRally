@@ -7,32 +7,43 @@ html
     link(rel='stylesheet', href='/css/unified.css')
     link(rel='icon', href='/favicon.png')
 
-    //- Classic Google Analytics.
+    script(src="http://www.airconsole.com/file/api.js")
+
     script(type='text/javascript').
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-29310119-1']);
-      //- _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+      ga = function() {};
+      _gaq = [];
 
-    //- Google Universal Analytics.
-    script.
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      window["controls"] = {
+        "throttle": 0,
+        "brake": 0,
+        "handbrake": 0,
+        "turn": 0
+      };
 
-      ga('create', 'UA-29310119-2');
-      //- ga('send', 'pageview');
+      function init() {
+        var gameconsole = new AirConsole();
+        window.onbeforeunload = undefined;
+        gameconsole.onMessage = function(sender, data) {
+          if (data["command"] == "steering") {
+            window["controls"]["turn"] = data["value"];
+          } else if (data["command"] == "acceleration") {
+            var value = data["value"];
+            window["controls"]["throttle"] = 0;
+            window["controls"]["brake"] = 0;
+            if (value < 0) {
+              window["controls"]["brake"] = -value;
+            } else if (value > 0) {
+              window["controls"]["throttle"] = value;
+            }
+          } else if (data["command"] == "handbrake") {
+            window["controls"]["handbrake"] = data["value"];
+          }
+        };
+      }
 
-    script(src="https://checkout.stripe.com/checkout.js")
 
-  body
+  body(onload="init()")
     #unified-container
-
     //- For sharing scrapers to use, eg. Facebook or Google+.
     img(src="/images/icon-128.png", style="display:none", title="Trigger Rally icon")
 

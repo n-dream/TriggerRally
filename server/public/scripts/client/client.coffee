@@ -293,6 +293,17 @@ define [
       camPos.z = Math.max camPos.z, terrainHeight + 0.2
       return
 
+  class AirConsoleController
+    constructor: (@vehic, @client) ->
+      @controls = util.deepClone @vehic.controller.input
+
+    update: (delta) ->
+      controls = @controls
+      controls.throttle = window.controls["throttle"]
+      controls.brake = window.controls["brake"]
+      controls.turn = window.controls["turn"]
+      controls.handbrake = window.controls["handbrake"]
+
   class KeyboardController
     THROTTLE_RESPONSE = 8
     BRAKE_RESPONSE = 5
@@ -364,6 +375,7 @@ define [
       @controllers = []
       @gamepadMap = {}
       @controllers.push new KeyboardController vehic, client
+      @controllers.push new AirConsoleController vehic, client
 
     update: (camera, delta) ->
       for gamepad, i in getGamepads()

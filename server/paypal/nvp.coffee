@@ -13,7 +13,7 @@ API_VERSION = '78.0'
 module.exports = class NVPEndpoint
   constructor: (@params, opts) ->
     @sandbox = opts?.sandbox ? false
-    params.VERSION or= opts?.version or API_VERSION
+    @params.VERSION or= opts?.version or API_VERSION
 
   request: (params, callback) ->
     params = _.extend [], @params, params

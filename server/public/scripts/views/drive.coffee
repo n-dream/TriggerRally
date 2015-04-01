@@ -287,7 +287,7 @@ define [
       @socket.emit 'times', { times }
 
       backToAirConsoleMenu = ->
-        window.history.go -1
+        window.location.href = "/screen.html";
 
       window.setTimeout backToAirConsoleMenu, 5000
 

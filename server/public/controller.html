@@ -88,44 +88,37 @@
     me.history = {};
     var width = Math.max($(document).width(), $(document).height());
     var height = Math.min($(document).width(), $(document).height());
-    var limitToAbs1 = function(value) {
-      return Math.max(-1, Math.min(1, value));
-    }
-    var steering_center = width * 0.3 / 2;
     new VirtualJoystick({
                           container: document.getElementById("steering"),
                           baseElement: document.createElement('canvas'),
-                          baseX: steering_center,
-                          baseY: height / 2,
                           mouseSupport: true,
-                          stationaryBase: true,
+                          limitToAxisX: true,
+                          limitStickTravel: true,
+                          stickRadius: 80,
+                          stationaryBase: false,
                           onDown: function (x, y) {
-                            me.command("steering",
-                                       -limitToAbs1(x/steering_center*1.3));
+                            me.command("steering", -x/80);
                           },
                           onMove: function (x, y) {
-                            me.command("steering",
-                                       -limitToAbs1(x/steering_center*1.3));
+                            me.command("steering", -x/80);
                           },
                           onUp: function () {
                             me.command("steering", 0);
                           }
                         });
-    var acceleration_center = height * 0.84 / 2;
     new VirtualJoystick({
                           container: document.getElementById("acceleration"),
                           baseElement: document.createElement('canvas'),
-                          baseX: width / 2,
-                          baseY: acceleration_center,
                           mouseSupport: true,
-                          stationaryBase: true,
+                          limitToAxisY: true,
+                          limitStickTravel: true,
+                          stickRadius: 80,
+                          stationaryBase: false,
                           onDown: function (x, y) {
-                            me.command("acceleration",
-                                       limitToAbs1(-y/acceleration_center*1.5));
+                            me.command("acceleration", -y/80);
                           },
                           onMove: function (x, y) {
-                            me.command("acceleration",
-                                       limitToAbs1(-y/acceleration_center*1.5));
+                            me.command("acceleration", -y/80);
                           },
                           onUp: function () {
                             me.command("acceleration", 0);
